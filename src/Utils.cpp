@@ -250,23 +250,32 @@ bool ImportCell2Ds(PolygonalMesh& mesh)
 }
 
 bool test_edges(const PolygonalMesh& mesh){
-	unsigned int count = 0;
+	const double eps_1 = 10e-8;
 	for (unsigned int i=0;i<mesh.NumCell1Ds;i++){
-		if (mesh.Cell1DsExtrema (0,i) == mesh.Cell1DsExtrema(1,i)){
-			cerr<<"L'edge con id "<<i<<" ha stesso punto di partenza e arrivo!"<<endl;
-			count++;
-		}	
-	}
-	if (count == 0){
-		return true;
-	}
-	else {
+		
+		unsigned int idInizio= mesh.Cell1DsExtrema(0,i);
+		unsigned int idFine = mesh.Cell1DsExtrema(1,i);
+		
+		double x1 =mesh.Cell0DsCoordinates(0,idInizio);
+		double y1 =mesh.Cell0DsCoordinates(1,idInizio);
+		double x2 =mesh.Cell0DsCoordinates(0,idFine);
+		double y2 =mesh.Cell0DsCoordinates(1,idFine);
+		
+		double dist = sqrt(pow((x2-x1),2)+pow((y2-y1),2));
+		//cout<<dist<<endl;
+		if (dist <= eps_1)
 		return false;
+		
 	}
+	
+	
+	
+		return true;
+	
 }
 
 bool test_aree(const PolygonalMesh& mesh){
-	const double eps = 10e-12;
+	const double eps_2 = 10e-16;
 	for (unsigned int i=0;i<mesh.NumCell2Ds;i++){
 		
 		double area =0.0;
@@ -283,12 +292,44 @@ bool test_aree(const PolygonalMesh& mesh){
             area += x1 * y2 - x2 * y1;
 		}
 		area = abs(area)/2.0;
-		if (area<= eps)
+		if (area<= eps_2)
 			return false;
 	}
 	return true;
 }
 
+bool test_marker(const PolygonalMesh& mesh){
+	map<unsigned int, list<unsigned int>> marker_0_corretto = {
+		{1,{0}},
+		{2,{1}},
+		{3,{2}},
+		{4,{3}},
+		{5,{6,16,24}},
+		{6,{7,17,22,78}},
+		{7,{8,20,23,52,59}},
+		{8,{5,15,21,26,92}},	
+	};
+	map<unsigned int, list<unsigned int>> marker_1_corretto = {
+		{5,{8,19,22,28}},
+		{6,{6,23,26,126,127}},
+		{7,{14,17,24,79,92,93}},
+		{8,{11,25,29,30,159,160}},	
+	};
+	map<unsigned int, list<unsigned int>> marker_2_corretto = {};
+	if (!(mesh.MarkerCell0Ds==marker_0_corretto)){
+		cout<<"errore marker 0Ds"<<endl;
+		return false;
+	}
+	if (!(mesh.MarkerCell1Ds==marker_1_corretto)){
+		cout<<"errore marker 1Ds"<<endl;
+		return false;
+	}
+	if (!(mesh.MarkerCell2Ds==marker_2_corretto)){
+		cout<<"errore marker 2Ds"<<endl;
+		return false;
+	}
+	return true;
+}
 
 
 }

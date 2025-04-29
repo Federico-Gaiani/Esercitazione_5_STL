@@ -74,6 +74,14 @@ int main()
 		cout << "le aree sono tutte non nulle" << endl;
 	}
 	
+	if (!test_marker(mesh))
+	{
+		cerr << "errore marker" << endl;
+        return 1;
+	}else{
+		cout << "marker registrati correttamente" << endl;
+	}
+	
 	Gedim::UCDUtilities utilities;
     {
         vector<Gedim::UCDProperty<double>> cell0Ds_properties(1);

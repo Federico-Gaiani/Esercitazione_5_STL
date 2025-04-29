@@ -23,5 +23,7 @@ bool test_edges(const PolygonalMesh& mesh);
 
 bool test_aree(const PolygonalMesh& mesh);
 
+bool test_marker(const PolygonalMesh& mesh);
+
 }
 
