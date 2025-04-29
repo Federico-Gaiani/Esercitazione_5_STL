@@ -19,5 +19,9 @@ bool ImportCell1Ds(PolygonalMesh& mesh);
 
 bool ImportCell2Ds(PolygonalMesh& mesh);
 
+bool test_edges(const PolygonalMesh& mesh);
+
+bool test_aree(const PolygonalMesh& mesh);
+
 }
 

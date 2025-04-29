@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <cmath>
 
 namespace PolygonalLibrary
 {
@@ -247,5 +248,47 @@ bool ImportCell2Ds(PolygonalMesh& mesh)
 
     return true;
 }
+
+bool test_edges(const PolygonalMesh& mesh){
+	unsigned int count = 0;
+	for (unsigned int i=0;i<mesh.NumCell1Ds;i++){
+		if (mesh.Cell1DsExtrema (0,i) == mesh.Cell1DsExtrema(1,i)){
+			cerr<<"L'edge con id "<<i<<" ha stesso punto di partenza e arrivo!"<<endl;
+			count++;
+		}	
+	}
+	if (count == 0){
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+bool test_aree(const PolygonalMesh& mesh){
+	const double eps = 10e-12;
+	for (unsigned int i=0;i<mesh.NumCell2Ds;i++){
+		
+		double area =0.0;
+		
+		for (unsigned int j=0; j<mesh.Cell2DsNumVert[i]; j++){
+			unsigned int idPoint=(mesh.Cell2DsVertices[i])[j];
+			unsigned int idPointSucc=(mesh.Cell2DsVertices[i])[(j+1)%mesh.Cell2DsNumVert[i]];
+			//cout<<j<<" "<<idPoint<<" "<<idPointSucc<<endl;
+			double x1 = mesh.Cell0DsCoordinates(0, idPoint);
+            double y1 = mesh.Cell0DsCoordinates(1, idPoint);
+            double x2 = mesh.Cell0DsCoordinates(0, idPointSucc);
+            double y2 = mesh.Cell0DsCoordinates(1, idPointSucc);
+
+            area += x1 * y2 - x2 * y1;
+		}
+		area = abs(area)/2.0;
+		if (area<= eps)
+			return false;
+	}
+	return true;
+}
+
+
 
 }

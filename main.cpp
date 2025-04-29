@@ -51,8 +51,29 @@ int main()
 		}
 		cout<<endl;
 	}
-*/	
+	
+	for (auto& it : mesh.MarkerCell2Ds[5])
+		cout<<it<<" ";
+	cout<<endl;
+*/
 
+
+	if(!test_edges(mesh))
+    {
+        cerr << "almeno un edge ha lunghezza nulla" << endl;
+        return 1;
+    }else{
+		cout << "gli edges hanno lunghezza non nulla" << endl;
+	}
+	
+	if (!test_aree(mesh))
+	{
+		cerr << "almeno un' area è nulla" << endl;
+        return 1;
+	}else{
+		cout << "le aree sono tutte non nulle" << endl;
+	}
+	
 	Gedim::UCDUtilities utilities;
     {
         vector<Gedim::UCDProperty<double>> cell0Ds_properties(1);
