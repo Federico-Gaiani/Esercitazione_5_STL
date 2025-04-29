@@ -33,8 +33,25 @@ int main()
 	for (auto& it : mesh.MarkerCell1Ds[5])
 		cout<<it<<" ";
 	cout<<endl;
-*/
 
+	for (unsigned int i=0;i<mesh.NumCell2Ds;i++){
+		int k=mesh.Cell2DsVertices[i].size();
+		cout<<k<<": ";
+		for (int j=0;j<k; j++){
+			cout<<(mesh.Cell2DsVertices[i])[j]<<" ";
+		}
+		cout<<endl;
+	}
+
+	for (unsigned int i=0;i<mesh.NumCell2Ds;i++){
+		int k=mesh.Cell2DsEdges[i].size();
+		cout<<k<<": ";
+		for (int j=0;j<k; j++){
+			cout<<(mesh.Cell2DsEdges[i])[j]<<" ";
+		}
+		cout<<endl;
+	}
+*/	
 
 	Gedim::UCDUtilities utilities;
     {

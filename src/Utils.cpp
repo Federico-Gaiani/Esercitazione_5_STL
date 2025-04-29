@@ -14,8 +14,8 @@ bool ImportMesh(PolygonalMesh& mesh)
     if(!ImportCell1Ds(mesh))
         return false;
 
-    //if(!ImportCell2Ds(mesh))
-    //    return false;
+    if(!ImportCell2Ds(mesh))
+        return false;
 
     return true;
 
@@ -151,8 +151,8 @@ bool ImportCell1Ds(PolygonalMesh& mesh)
 }
 // ***************************************************************************
 
-/*
-bool ImportCell2Ds(TriangularMesh& mesh)
+
+bool ImportCell2Ds(PolygonalMesh& mesh)
 {
     ifstream file;
     file.open("./Cell2Ds.csv");
@@ -179,6 +179,10 @@ bool ImportCell2Ds(TriangularMesh& mesh)
     }
 
     mesh.Cell2DsId.reserve(mesh.NumCell2Ds);
+	
+	mesh.Cell2DsNumVert.reserve(mesh.NumCell2Ds);
+	mesh.Cell2DsNumEdg.reserve(mesh.NumCell2Ds);
+	
     mesh.Cell2DsVertices.reserve(mesh.NumCell2Ds);
     mesh.Cell2DsEdges.reserve(mesh.NumCell2Ds);
 
@@ -187,21 +191,61 @@ bool ImportCell2Ds(TriangularMesh& mesh)
         istringstream converter(line);
 
         unsigned int id;
-        array<unsigned int, 3> vertices;
-        array<unsigned int, 3> edges;
+		unsigned int marker;
+		unsigned int NumVert;
+		unsigned int NumEdg;
+		char delim;
+		unsigned int Vert;
+		
+		//todo memorizzare nell'apposito vettore NumVert e NumEdg
 
-        converter >>  id;
-        for(unsigned int i = 0; i < 3; i++)
-            converter >> vertices[i];
-        for(unsigned int i = 0; i < 3; i++)
-            converter >> edges[i];
+        converter >>  id >> delim >> marker >> delim >> NumVert >> delim;
+		
+		vector<unsigned int> v = {};
+		v.reserve(NumVert);
+		
+        for(unsigned int i = 0; i < NumVert; i++){
+            converter >> Vert >> delim;
+			v.push_back(Vert);
+		}
+		converter >> NumEdg >> delim;
+		
+		vector<unsigned int> e = {};
+		e.reserve(NumEdg);
+		
+        for(unsigned int i = 0; i < NumEdg; i++){
+            converter >> Vert;
+			
+			e.push_back(Vert);
+			if (i < NumEdg - 1) converter >> delim;
 
+		}
+		
         mesh.Cell2DsId.push_back(id);
-        mesh.Cell2DsVertices.push_back(vertices);
-        mesh.Cell2DsEdges.push_back(edges);
+		mesh.Cell2DsNumVert.push_back(NumVert);
+		mesh.Cell2DsNumEdg.push_back(NumEdg);
+		mesh.Cell2DsVertices.push_back(v);
+		mesh.Cell2DsEdges.push_back(e);
+		
+		
+        
+		if(marker != 0)
+        {
+            const auto it = mesh.MarkerCell2Ds.find(marker);
+            if(it == mesh.MarkerCell2Ds.end())
+            {
+                mesh.MarkerCell2Ds.insert({marker, {id}});
+            }
+            else
+            {
+                // mesh.MarkerCell1Ds[marker].push_back(id);
+                it->second.push_back(id);
+            }
+        }
+		
     }
 
     return true;
 }
-*/
+
 }
