@@ -198,7 +198,6 @@ bool ImportCell2Ds(PolygonalMesh& mesh)
 		char delim;
 		unsigned int Vert;
 		
-		//todo memorizzare nell'apposito vettore NumVert e NumEdg
 
         converter >>  id >> delim >> marker >> delim >> NumVert >> delim;
 		
@@ -248,7 +247,7 @@ bool ImportCell2Ds(PolygonalMesh& mesh)
 
     return true;
 }
-
+//**************************************************************************************
 bool test_edges(const PolygonalMesh& mesh){
 	const double eps_1 = 10e-8;
 	for (unsigned int i=0;i<mesh.NumCell1Ds;i++){

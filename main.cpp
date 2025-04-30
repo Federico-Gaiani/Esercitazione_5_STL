@@ -10,54 +10,21 @@ using namespace PolygonalLibrary;
 
 int main()
 {
+	/// Per visualizzare online le mesh:
+    /// 1. Convertire i file .inp in file .vtu con https://meshconverter.it/it
+    /// 2. Caricare il file .vtu su https://kitware.github.io/glance/app/
+	
 	PolygonalMesh mesh;
 
+// import della mesh
     if(!ImportMesh(mesh))
     {
         cerr << "file not found" << endl;
         return 1;
     }
-/*	
-	for (unsigned int i=0;i<mesh.NumCell0Ds;i++){
-		cout<<mesh.Cell0DsId[i]<<" "<<mesh.Cell0DsCoordinates (0,i)<<" "<<mesh.Cell0DsCoordinates(1,i)<<endl;
-	}
-
-	for (auto& it : mesh.MarkerCell0Ds[5])
-		cout<<it<<" ";
-	cout<<endl;
-
-	for (unsigned int i=0;i<mesh.NumCell1Ds;i++){
-		cout<<mesh.Cell1DsId[i]<<" "<<mesh.Cell1DsExtrema (0,i)<<" "<<mesh.Cell1DsExtrema(1,i)<<endl;
-	}
-
-	for (auto& it : mesh.MarkerCell1Ds[5])
-		cout<<it<<" ";
-	cout<<endl;
-
-	for (unsigned int i=0;i<mesh.NumCell2Ds;i++){
-		int k=mesh.Cell2DsVertices[i].size();
-		cout<<k<<": ";
-		for (int j=0;j<k; j++){
-			cout<<(mesh.Cell2DsVertices[i])[j]<<" ";
-		}
-		cout<<endl;
-	}
-
-	for (unsigned int i=0;i<mesh.NumCell2Ds;i++){
-		int k=mesh.Cell2DsEdges[i].size();
-		cout<<k<<": ";
-		for (int j=0;j<k; j++){
-			cout<<(mesh.Cell2DsEdges[i])[j]<<" ";
-		}
-		cout<<endl;
-	}
-	
-	for (auto& it : mesh.MarkerCell2Ds[5])
-		cout<<it<<" ";
-	cout<<endl;
-*/
 
 
+//test lunghezza edges
 	if(!test_edges(mesh))
     {
         cerr << "almeno un edge ha lunghezza nulla" << endl;
@@ -65,7 +32,8 @@ int main()
     }else{
 		cout << "gli edges hanno lunghezza non nulla" << endl;
 	}
-	
+
+//test aree
 	if (!test_aree(mesh))
 	{
 		cerr << "almeno un' area è nulla" << endl;
@@ -74,6 +42,7 @@ int main()
 		cout << "le aree sono tutte non nulle" << endl;
 	}
 	
+// test marker
 	if (!test_marker(mesh))
 	{
 		cerr << "errore marker" << endl;
@@ -81,6 +50,7 @@ int main()
 	}else{
 		cout << "marker registrati correttamente" << endl;
 	}
+	
 	
 	Gedim::UCDUtilities utilities;
     {
